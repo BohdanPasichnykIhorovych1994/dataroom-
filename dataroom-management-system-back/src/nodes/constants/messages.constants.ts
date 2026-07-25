@@ -1,0 +1,11 @@
+export const FILE_TOO_LARGE_MESSAGE = 'File must be smaller than 1 MB';
+export const FILE_REQUIRED_MESSAGE = 'File is required';
+export const ONLY_PDF_ALLOWED_MESSAGE = 'Only PDF files are allowed';
+export const INVALID_PDF_MESSAGE = 'Invalid PDF file';
+export const NODE_NOT_FOUND_MESSAGE = 'Node not found';
+export const FILE_NOT_FOUND_MESSAGE = 'File not found';
+export const FILE_CONTENT_NOT_FOUND_MESSAGE = 'File content not found';
+export const PARENT_NOT_FOUND_MESSAGE = 'Parent folder not found';
+export const PARENT_MUST_BE_FOLDER_MESSAGE = 'Parent must be a folder';
+export const INVALID_NODE_ID_MESSAGE = 'Invalid node id';
+export const UPLOAD_FAILED_MESSAGE = 'Upload failed';

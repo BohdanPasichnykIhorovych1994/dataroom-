@@ -1,0 +1,71 @@
+---
+description: Data Room architecture, folder layout, and code style for agents
+alwaysApply: true
+---
+
+# Data Room — architecture & code style
+
+SPA: Vite 8 + React 19 + TypeScript + Tailwind 4 + shadcn/ui. Persistence via Nest/Mongo HTTP API (`fetch`). No IndexedDB.
+
+## Folder layout (`src/`)
+
+| Path | Put here |
+|------|----------|
+| `types/` | Domain types only (`FolderNode`, `FileNode`, …) |
+| `constants/` | Literals (`PDF_*`, `API_BASE_URL`, `MAX_NODE_NAME_LENGTH`, …) |
+| `helpers/` | Pure functions (names, files, search, format, download, nodes, `cn`) |
+| `storage/` | HTTP client + repositories (no React) |
+| `store/` | `DataroomContext` / `useDataroom` |
+| `hooks/` | Route/search UI hooks |
+| `pages/` | Route screens |
+| `components/{browser,dialogs,layout,navigation,preview}/` | Feature UI |
+| `components/ui/` | shadcn primitives (do not invent parallel UI kits) |
+| `lib/utils.ts` | shadcn bridge only — re-exports `cn` |
+
+Prefer barrel imports: `@/types`, `@/helpers`, `@/constants`. Alias `@/*` → `src/*`.
+
+## Domain
+
+- Flat tree: `DataroomNode` with `parentId: NodeId | null` (`null` = root).
+- Files are PDF-only (`mimeType: 'application/pdf'`). Blob bytes come from `GET /api/nodes/:id/content`.
+- Unique sibling names (case-insensitive) via `uniqueNameAmong` → `Name (1).pdf` (also enforce on server).
+- Delete cascades descendants + blobs on the server (`DELETE /api/nodes/:id`).
+- Sort: folders first; UI can sort by name / size / date (`sortNodesBy`).
+
+## Layering rules
+
+```
+pages/components → hooks/store → helpers/constants/types
+store → storage → fetch (HTTP API)
+```
+
+- Do **not** put React in `storage/` or business logic in `components/ui/`.
+- New pure logic → `helpers/`; new literals → `constants/`; new shapes → `types/`.
+- Mutations go through `DataroomContext` (API write + local state + toast).
+
+## API surface (expected backend)
+
+- `GET /api/nodes` → `DataroomNode[]`
+- `POST /api/nodes/folders` `{ name, parentId }` → `FolderNode`
+- `POST /api/nodes/files` multipart (`file`, `name`, `parentId`) → `FileNode`
+- `PATCH /api/nodes/:id` `{ name }` → `DataroomNode`
+- `DELETE /api/nodes/:id` → `{ deletedIds: NodeId[] }`
+- `GET /api/nodes/:id/content` → PDF bytes
+
+## Code style
+
+- Functional React components; hooks for reusable UI logic.
+- App code: `import { cn, … } from '@/helpers'`.
+- shadcn UI files: keep `import { cn } from '@/lib/utils'`.
+- `FileList` → use `Array.from(files)`, not `[...files]`.
+- Colocate tests: `*.test.ts(x)` next to source (Vitest + Testing Library; mock `fetch` / repository).
+- Match existing naming: PascalCase components, camelCase functions/hooks.
+- Do not add demos/seeds, unused deps, or drive-by refactors outside the task.
+- Prefer native `fetch` over axios unless interceptors/auth client features are required.
+
+## Product constraints (do not break)
+
+- PDF only on upload/drop; reject others with toast.
+- Sanitize names; max length from `MAX_NODE_NAME_LENGTH`.
+- Search is global name substring; clearing folder changes clears search; create/upload disabled while searching.
+- Routes: `/` and `/folder/:folderId`.

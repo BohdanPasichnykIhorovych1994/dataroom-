@@ -1,0 +1,22 @@
+services:
+  backend:
+    build:
+      context: ./dataroom-management-system-back
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./dataroom-management-system-back/.env
+    environment:
+      PORT: 3000
+
+  frontend:
+    build:
+      context: ./dataroom-management-system-front
+      args:
+        VITE_API_URL: ""
+    restart: unless-stopped
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
