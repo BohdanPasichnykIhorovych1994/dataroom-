@@ -1,38 +1,41 @@
-import { useState, type SubmitEvent } from 'react'
-import { Link, Navigate, useNavigate } from 'react-router-dom'
-import { Database } from 'lucide-react'
-import { toast } from 'sonner'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { clearCustomValidity, setEnglishValidity } from '@/helpers/formValidation'
-import { ApiError } from '@/storage/http'
-import { useAuth } from '@/store/AuthContext'
+import { useState, type SubmitEvent } from "react";
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Database } from "lucide-react";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  clearCustomValidity,
+  setEnglishValidity,
+} from "@/helpers/formValidation";
+import { ApiError } from "@/storage/http";
+import { useAuth } from "@/store/AuthContext";
 
 export function SignUpPage() {
-  const { signUp, user, ready } = useAuth()
-  const navigate = useNavigate()
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [pending, setPending] = useState(false)
+  const { signUp, user, ready } = useAuth();
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [pending, setPending] = useState(false);
 
   if (ready && user) {
-    return <Navigate to="/" replace />
+    return <Navigate to="/" replace />;
   }
 
   async function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
-    e.preventDefault()
-    if (pending) return
-    setPending(true)
+    e.preventDefault();
+    if (pending) return;
+    setPending(true);
     try {
-      await signUp(email.trim(), password, false)
-      navigate('/', { replace: true })
+      await signUp(email.trim(), password, false);
+      navigate("/", { replace: true });
     } catch (err) {
       const message =
-        err instanceof ApiError ? err.message : 'Sign up failed. Try again.'
-      toast.error(message)
+        err instanceof ApiError ? err.message : "Sign up failed. Try again.";
+      toast.error(message);
     } finally {
-      setPending(false)
+      setPending(false);
     }
   }
 
@@ -61,8 +64,8 @@ export function SignUpPage() {
               required
               value={email}
               onChange={(e) => {
-                clearCustomValidity(e)
-                setEmail(e.target.value)
+                clearCustomValidity(e);
+                setEmail(e.target.value);
               }}
               onInvalid={setEnglishValidity}
               placeholder="you@example.com"
@@ -78,8 +81,8 @@ export function SignUpPage() {
               minLength={8}
               value={password}
               onChange={(e) => {
-                clearCustomValidity(e)
-                setPassword(e.target.value)
+                clearCustomValidity(e);
+                setPassword(e.target.value);
               }}
               onInvalid={setEnglishValidity}
               placeholder="At least 8 characters"
@@ -87,17 +90,20 @@ export function SignUpPage() {
           </div>
 
           <Button type="submit" disabled={pending} className="w-full">
-            {pending ? 'Creating…' : 'Sign up'}
+            {pending ? "Creating…" : "Sign up"}
           </Button>
         </form>
 
         <p className="mt-6 text-center text-sm text-muted-foreground">
-          Already have an account?{' '}
-          <Link to="/login" className="font-medium text-foreground underline-offset-4 hover:underline">
+          Already have an account?{" "}
+          <Link
+            to="/login"
+            className="font-medium text-foreground underline-offset-4 hover:underline"
+          >
             Sign in
           </Link>
         </p>
       </div>
     </div>
-  )
+  );
 }

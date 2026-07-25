@@ -100,7 +100,10 @@ export function AppShell({ children }: AppShellProps) {
         <Separator />
         <div className="flex flex-col gap-2 px-3 py-3">
           {user?.email && (
-            <p className="truncate px-1 text-xs text-muted-foreground" title={user.email}>
+            <p
+              className="truncate px-1 text-sm font-medium text-muted-foreground"
+              title={user.email}
+            >
               {user.email}
             </p>
           )}
@@ -108,7 +111,7 @@ export function AppShell({ children }: AppShellProps) {
             type="button"
             variant="ghost"
             size="sm"
-            className="justify-start gap-2"
+            className="justify-start gap-2 text-base font-semibold cursor-pointer"
             onClick={handleLogout}
           >
             <LogOut className="size-4 opacity-70" />
@@ -119,7 +122,7 @@ export function AppShell({ children }: AppShellProps) {
       <main className="flex min-w-0 flex-1 flex-col">
         <div className="flex items-center justify-between gap-2 border-b border-border px-4 py-2 md:hidden">
           <p className="truncate text-sm font-medium">Data Room</p>
-          <Button type="button" variant="ghost" size="sm" onClick={handleLogout}>
+          <Button type="button" variant="ghost" size="sm" className="cursor-pointer" onClick={handleLogout}>
             <LogOut className="size-4" />
             Sign out
           </Button>
