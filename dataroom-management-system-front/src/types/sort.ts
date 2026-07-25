@@ -1,2 +1,1 @@
-export type SortField = 'name' | 'size' | 'date'
-export type SortDirection = 'asc' | 'desc'
+export type { SORT_FIELD, SORT_DIRECTION } from "@/constants/sort";

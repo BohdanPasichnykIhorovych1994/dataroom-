@@ -1,6 +1,7 @@
 import { Search, X } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import { INPUT_TYPE } from '@/constants'
 import { cn } from '@/helpers'
 
 type SearchInputProps = {
@@ -17,7 +18,7 @@ export function SearchInput({ value, onChange, className }: SearchInputProps) {
         aria-hidden
       />
       <Input
-        type="text"
+        type={INPUT_TYPE.TEXT}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder="Search files and folders…"

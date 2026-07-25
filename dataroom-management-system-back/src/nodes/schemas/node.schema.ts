@@ -1,7 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
-import { NODES_COLLECTION, PDF_MIME_TYPE } from '../constants';
-import { NodeType, PdfMimeType } from '../types';
+import {
+  NODE_TYPE_VALUES,
+  NODES_COLLECTION,
+  NODE_TYPE,
+  PDF_MIME_TYPE,
+} from '../constants';
+import type { PdfMimeType } from '../types';
 
 export type NodeDocument = HydratedDocument<DataroomNodeEntity>;
 
@@ -13,8 +18,8 @@ export class DataroomNodeEntity {
   @Prop({ type: Types.ObjectId, required: true, index: true })
   ownerId: Types.ObjectId;
 
-  @Prop({ required: true, enum: ['folder', 'file'] })
-  type: NodeType;
+  @Prop({ required: true, enum: NODE_TYPE_VALUES })
+  type: NODE_TYPE;
 
   @Prop({ required: true, trim: true })
   name: string;

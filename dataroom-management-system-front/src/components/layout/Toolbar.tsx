@@ -4,7 +4,8 @@ import { Button } from '@/components/ui/button'
 import { FolderBreadcrumbs } from '@/components/navigation/FolderBreadcrumbs'
 import { SearchInput } from '@/components/navigation/SearchInput'
 import { SortMenu } from '@/components/navigation/SortMenu'
-import type { SortDirection, SortField } from '@/types'
+import { INPUT_TYPE, PDF_EXTENSION, PDF_MIME } from '@/constants'
+import type { SORT_DIRECTION, SORT_FIELD } from '@/types'
 
 type ToolbarProps = {
   onCreateFolder: () => void
@@ -13,10 +14,10 @@ type ToolbarProps = {
   uploading?: boolean
   searchQuery: string
   onSearchChange: (value: string) => void
-  sortBy: SortField
-  sortDirection: SortDirection
-  onSortByChange: (field: SortField) => void
-  onSortDirectionChange: (direction: SortDirection) => void
+  sortBy: SORT_FIELD
+  sortDirection: SORT_DIRECTION
+  onSortByChange: (field: SORT_FIELD) => void
+  onSortDirectionChange: (direction: SORT_DIRECTION) => void
 }
 
 export function Toolbar({
@@ -60,8 +61,8 @@ export function Toolbar({
         </Button>
         <input
           ref={inputRef}
-          type="file"
-          accept="application/pdf,.pdf"
+          type={INPUT_TYPE.FILE}
+          accept={`${PDF_MIME},${PDF_EXTENSION}`}
           multiple
           className="hidden"
           disabled={busy}

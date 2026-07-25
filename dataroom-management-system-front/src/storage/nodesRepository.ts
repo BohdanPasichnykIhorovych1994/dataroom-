@@ -1,4 +1,5 @@
 import type { DataroomNode, FileNode, FolderNode, NodeId } from '@/types'
+import { HTTP_STATUS } from '@/constants'
 import { ApiError, apiBlob, apiJson } from '@/storage/http'
 
 export async function getAllNodes(): Promise<DataroomNode[]> {
@@ -53,7 +54,7 @@ export async function getBlob(id: NodeId): Promise<Blob | undefined> {
   try {
     return await apiBlob(`/api/nodes/${encodeURIComponent(id)}/content`)
   } catch (e) {
-    if (e instanceof ApiError && e.status === 404) return undefined
+    if (e instanceof ApiError && e.status === HTTP_STATUS.NOT_FOUND) return undefined
     throw e
   }
 }

@@ -1,8 +1,9 @@
-import { PdfMimeType } from './node.types';
+import { NODE_TYPE } from '../constants';
+import type { PdfMimeType } from './node.types';
 
 export type FolderNodeResponse = {
   id: string;
-  type: 'folder';
+  type: NODE_TYPE.FOLDER;
   name: string;
   parentId: string | null;
   createdAt: number;
@@ -11,7 +12,7 @@ export type FolderNodeResponse = {
 
 export type FileNodeResponse = {
   id: string;
-  type: 'file';
+  type: NODE_TYPE.FILE;
   name: string;
   parentId: string | null;
   size: number;

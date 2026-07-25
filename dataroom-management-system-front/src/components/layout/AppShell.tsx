@@ -1,47 +1,48 @@
-import { useMemo, type ReactNode } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { Database, Folder, LogOut } from 'lucide-react'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import { Separator } from '@/components/ui/separator'
-import { Button } from '@/components/ui/button'
-import { cn } from '@/helpers'
-import { useAuth } from '@/store/AuthContext'
-import { useDataroom } from '@/store/DataroomContext'
-import { useCurrentFolderId } from '@/hooks/useFolderNavigation'
-import type { NodeId } from '@/types'
+import { useMemo, type ReactNode } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Database, Folder, LogOut } from "lucide-react";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/helpers";
+import { APP_ROUTE, folderRoute, NODE_TYPE } from "@/constants";
+import { useAuth } from "@/store/AuthContext";
+import { useDataroom } from "@/store/DataroomContext";
+import { useCurrentFolderId } from "@/hooks/useFolderNavigation";
+import type { NodeId } from "@/types";
 
 type AppShellProps = {
-  children: ReactNode
-}
+  children: ReactNode;
+};
 
 function useActiveRootFolderId(currentId: NodeId | null): NodeId | null {
-  const { nodesById } = useDataroom()
+  const { nodesById } = useDataroom();
 
   return useMemo(() => {
-    let id = currentId
+    let id = currentId;
     while (id) {
-      const node = nodesById.get(id)
-      if (!node || node.type !== 'folder') return null
-      if (node.parentId === null) return node.id
-      id = node.parentId
+      const node = nodesById.get(id);
+      if (!node || node.type !== NODE_TYPE.FOLDER) return null;
+      if (node.parentId === null) return node.id;
+      id = node.parentId;
     }
-    return null
-  }, [currentId, nodesById])
+    return null;
+  }, [currentId, nodesById]);
 }
 
 export function AppShell({ children }: AppShellProps) {
-  const { childrenByParent } = useDataroom()
-  const { user, logout } = useAuth()
-  const navigate = useNavigate()
-  const currentId = useCurrentFolderId()
-  const activeRootId = useActiveRootFolderId(currentId)
+  const { childrenByParent } = useDataroom();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+  const currentId = useCurrentFolderId();
+  const activeRootId = useActiveRootFolderId(currentId);
   const rootFolders = (childrenByParent.get(null) ?? []).filter(
-    (n) => n.type === 'folder',
-  )
+    (n) => n.type === NODE_TYPE.FOLDER,
+  );
 
   function handleLogout() {
-    logout()
-    navigate('/login', { replace: true })
+    logout();
+    navigate(APP_ROUTE.LOGIN, { replace: true });
   }
 
   return (
@@ -52,20 +53,24 @@ export function AppShell({ children }: AppShellProps) {
             <Database className="size-4" />
           </div>
           <div className="min-w-0">
-            <p className="truncate text-sm font-semibold tracking-tight">Data Room</p>
-            <p className="truncate text-xs text-muted-foreground">Cloud workspace</p>
+            <p className="truncate text-sm font-semibold tracking-tight">
+              Data Room
+            </p>
+            <p className="truncate text-xs text-muted-foreground">
+              Cloud workspace
+            </p>
           </div>
         </div>
         <Separator />
         <ScrollArea className="flex-1 px-2 py-3">
           <nav className="flex flex-col gap-0.5">
             <Link
-              to="/"
+              to={APP_ROUTE.ROOT}
               className={cn(
-                'flex items-center gap-2 rounded-md px-2.5 py-2 text-sm transition-colors',
+                "flex items-center gap-2 rounded-md px-2.5 py-2 text-sm transition-colors",
                 currentId === null
-                  ? 'bg-sidebar-accent font-medium text-sidebar-accent-foreground'
-                  : 'text-sidebar-foreground hover:bg-sidebar-accent/70',
+                  ? "bg-sidebar-accent font-medium text-sidebar-accent-foreground"
+                  : "text-sidebar-foreground hover:bg-sidebar-accent/70",
               )}
             >
               <Folder className="size-4 opacity-70" />
@@ -77,23 +82,23 @@ export function AppShell({ children }: AppShellProps) {
               </p>
             )}
             {rootFolders.map((folder) => {
-              const isActive = activeRootId === folder.id
+              const isActive = activeRootId === folder.id;
               return (
                 <Link
                   key={folder.id}
-                  to={`/folder/${folder.id}`}
+                  to={folderRoute(folder.id)}
                   className={cn(
-                    'flex items-center gap-2 rounded-md px-2.5 py-2 text-sm transition-colors',
+                    "flex items-center gap-2 rounded-md px-2.5 py-2 text-sm transition-colors",
                     isActive
-                      ? 'bg-sidebar-accent font-medium text-sidebar-accent-foreground'
-                      : 'text-sidebar-foreground hover:bg-sidebar-accent/70',
+                      ? "bg-sidebar-accent font-medium text-sidebar-accent-foreground"
+                      : "text-sidebar-foreground hover:bg-sidebar-accent/70",
                   )}
-                  aria-current={isActive ? 'page' : undefined}
+                  aria-current={isActive ? "page" : undefined}
                 >
                   <Folder className="size-4 opacity-70" />
                   <span className="truncate">{folder.name}</span>
                 </Link>
-              )
+              );
             })}
           </nav>
         </ScrollArea>
@@ -122,7 +127,13 @@ export function AppShell({ children }: AppShellProps) {
       <main className="flex min-w-0 flex-1 flex-col">
         <div className="flex items-center justify-between gap-2 border-b border-border px-4 py-2 md:hidden">
           <p className="truncate text-sm font-medium">Data Room</p>
-          <Button type="button" variant="ghost" size="sm" className="cursor-pointer" onClick={handleLogout}>
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            className="cursor-pointer"
+            onClick={handleLogout}
+          >
             <LogOut className="size-4" />
             Sign out
           </Button>
@@ -130,5 +141,5 @@ export function AppShell({ children }: AppShellProps) {
         {children}
       </main>
     </div>
-  )
+  );
 }

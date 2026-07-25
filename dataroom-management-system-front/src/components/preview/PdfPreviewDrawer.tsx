@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Download, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { KEYBOARD_KEY } from '@/constants'
 import { downloadBlob } from '@/helpers'
 import { useDataroom } from '@/store/DataroomContext'
 import type { FileNode } from '@/types'
@@ -59,7 +60,7 @@ export function PdfPreviewDrawer({ file, onClose }: PdfPreviewDrawerProps) {
     if (!file) return
 
     function onKeyDown(e: KeyboardEvent) {
-      if (e.key === 'Escape') onClose()
+      if (e.key === KEYBOARD_KEY.ESCAPE) onClose()
     }
 
     document.addEventListener('keydown', onKeyDown)

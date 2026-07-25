@@ -1,11 +1,12 @@
 import { describe, expect, it } from 'vitest'
 import { filterNodesByQuery, isFile, isFolder } from '@/helpers'
 import type { DataroomNode } from '@/types'
+import { NODE_TYPE } from '@/constants'
 
 const nodes: DataroomNode[] = [
   {
     id: '1',
-    type: 'folder',
+    type: NODE_TYPE.FOLDER,
     name: 'Legal',
     parentId: null,
     createdAt: 1,
@@ -13,7 +14,7 @@ const nodes: DataroomNode[] = [
   },
   {
     id: '2',
-    type: 'file',
+    type: NODE_TYPE.FILE,
     name: 'NDA Template.pdf',
     parentId: '1',
     size: 1,
@@ -23,7 +24,7 @@ const nodes: DataroomNode[] = [
   },
   {
     id: '3',
-    type: 'folder',
+    type: NODE_TYPE.FOLDER,
     name: 'Finance',
     parentId: null,
     createdAt: 1,
@@ -51,8 +52,8 @@ describe('filterNodesByQuery', () => {
   it('lists folders before files', () => {
     const results = filterNodesByQuery(nodes, 'e')
     const types = results.map((n) => n.type)
-    const firstFile = types.indexOf('file')
-    const lastFolder = types.lastIndexOf('folder')
+    const firstFile = types.indexOf(NODE_TYPE.FILE)
+    const lastFolder = types.lastIndexOf(NODE_TYPE.FOLDER)
     if (firstFile !== -1 && lastFolder !== -1) {
       expect(lastFolder).toBeLessThan(firstFile)
     }

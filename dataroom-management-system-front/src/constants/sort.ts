@@ -1,4 +1,13 @@
-import type { SortDirection, SortField } from '@/types'
+export enum SORT_FIELD {
+  NAME = "name",
+  SIZE = "size",
+  DATE = "date",
+}
 
-export const DEFAULT_SORT_FIELD: SortField = 'name'
-export const DEFAULT_SORT_DIRECTION: SortDirection = 'asc'
+export enum SORT_DIRECTION {
+  ASC = "asc",
+  DESC = "desc",
+}
+
+export const DEFAULT_SORT_FIELD = SORT_FIELD.NAME;
+export const DEFAULT_SORT_DIRECTION = SORT_DIRECTION.ASC;

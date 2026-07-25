@@ -9,19 +9,19 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import type { SortDirection, SortField } from '@/types'
+import { SORT_DIRECTION, SORT_FIELD } from '@/constants'
 
 type SortMenuProps = {
-  sortBy: SortField
-  direction: SortDirection
-  onSortByChange: (field: SortField) => void
-  onDirectionChange: (direction: SortDirection) => void
+  sortBy: SORT_FIELD
+  direction: SORT_DIRECTION
+  onSortByChange: (field: SORT_FIELD) => void
+  onDirectionChange: (direction: SORT_DIRECTION) => void
 }
 
-const FIELD_LABELS: Record<SortField, string> = {
-  name: 'Name',
-  size: 'Size',
-  date: 'Date',
+const FIELD_LABELS: Record<SORT_FIELD, string> = {
+  [SORT_FIELD.NAME]: 'Name',
+  [SORT_FIELD.SIZE]: 'Size',
+  [SORT_FIELD.DATE]: 'Date',
 }
 
 export function SortMenu({
@@ -37,7 +37,7 @@ export function SortMenu({
           type="button"
           variant="outline"
           size="icon-sm"
-          aria-label={`Sort by ${FIELD_LABELS[sortBy]}, ${direction === 'asc' ? 'ascending' : 'descending'}`}
+          aria-label={`Sort by ${FIELD_LABELS[sortBy]}, ${direction === SORT_DIRECTION.ASC ? 'ascending' : 'descending'}`}
           title={`Sort by ${FIELD_LABELS[sortBy]}`}
         >
           <ArrowUpDown />
@@ -47,23 +47,23 @@ export function SortMenu({
         <DropdownMenuLabel>Sort by</DropdownMenuLabel>
         <DropdownMenuRadioGroup
           value={sortBy}
-          onValueChange={(value) => onSortByChange(value as SortField)}
+          onValueChange={(value) => onSortByChange(value as SORT_FIELD)}
         >
-          <DropdownMenuRadioItem value="name">Name</DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="size">Size</DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="date">Date</DropdownMenuRadioItem>
+          <DropdownMenuRadioItem value={SORT_FIELD.NAME}>Name</DropdownMenuRadioItem>
+          <DropdownMenuRadioItem value={SORT_FIELD.SIZE}>Size</DropdownMenuRadioItem>
+          <DropdownMenuRadioItem value={SORT_FIELD.DATE}>Date</DropdownMenuRadioItem>
         </DropdownMenuRadioGroup>
         <DropdownMenuSeparator />
         <DropdownMenuLabel>Order</DropdownMenuLabel>
         <DropdownMenuRadioGroup
           value={direction}
-          onValueChange={(value) => onDirectionChange(value as SortDirection)}
+          onValueChange={(value) => onDirectionChange(value as SORT_DIRECTION)}
         >
-          <DropdownMenuRadioItem value="asc">
+          <DropdownMenuRadioItem value={SORT_DIRECTION.ASC}>
             <ArrowUpNarrowWide />
             Ascending
           </DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="desc">
+          <DropdownMenuRadioItem value={SORT_DIRECTION.DESC}>
             <ArrowDownWideNarrow />
             Descending
           </DropdownMenuRadioItem>

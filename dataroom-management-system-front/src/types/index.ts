@@ -4,6 +4,6 @@ export type {
   FileNode,
   DataroomNode,
   ParentKey,
-} from '@/types/dataroom'
-export type { SortField, SortDirection } from '@/types/sort'
-export type { AuthUser, AuthResponse } from '@/types/auth'
+} from "@/types/dataroom";
+export type { SORT_FIELD, SORT_DIRECTION } from "@/types/sort";
+export type { AuthUser, AuthResponse } from "@/types/auth";

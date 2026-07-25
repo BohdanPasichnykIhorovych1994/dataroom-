@@ -22,10 +22,19 @@ import {
 } from "@/hooks/useFolderNavigation";
 import { useSearchNodes } from "@/hooks/useSearchNodes";
 import { downloadBlob, isPdfFile, cn, sortNodesBy } from "@/helpers";
-import { DEFAULT_SORT_DIRECTION, DEFAULT_SORT_FIELD } from "@/constants";
+import {
+  APP_ROUTE,
+  DATA_TRANSFER_TYPE,
+  DEFAULT_SORT_DIRECTION,
+  DEFAULT_SORT_FIELD,
+  DROP_EFFECT,
+  EMPTY_VARIANT,
+  folderRoute,
+  NODE_TYPE,
+} from "@/constants";
 import { AnimatePresence, Fade } from "@/motion";
 import { useDataroom } from "@/store/DataroomContext";
-import type { DataroomNode, FileNode, SortDirection, SortField } from "@/types";
+import type { DataroomNode, FileNode, SORT_DIRECTION, SORT_FIELD } from "@/types";
 
 export function FolderPage() {
   const navigate = useNavigate();
@@ -50,8 +59,8 @@ export function FolderPage() {
   const [query, setQuery] = useState("");
   const searchResults = useSearchNodes(query);
   const isSearching = query.trim().length > 0;
-  const [sortBy, setSortBy] = useState<SortField>(DEFAULT_SORT_FIELD);
-  const [sortDirection, setSortDirection] = useState<SortDirection>(
+  const [sortBy, setSortBy] = useState<SORT_FIELD>(DEFAULT_SORT_FIELD);
+  const [sortDirection, setSortDirection] = useState<SORT_DIRECTION>(
     DEFAULT_SORT_DIRECTION,
   );
 
@@ -71,7 +80,7 @@ export function FolderPage() {
   const folderMissing =
     !loading &&
     folderId !== null &&
-    (!currentFolder || currentFolder.type !== "folder");
+    (!currentFolder || currentFolder.type !== NODE_TYPE.FOLDER);
 
   useEffect(() => {
     setQuery("");
@@ -80,7 +89,7 @@ export function FolderPage() {
   useEffect(() => {
     if (folderMissing) {
       toast.error("Folder not found");
-      navigate("/", { replace: true });
+      navigate(APP_ROUTE.ROOT, { replace: true });
     }
   }, [folderMissing, navigate]);
 
@@ -137,7 +146,9 @@ export function FolderPage() {
 
     if (folderId && deleted.includes(folderId)) {
       const parentId = deleteTarget.parentId;
-      navigate(parentId ? `/folder/${parentId}` : "/", { replace: true });
+      navigate(parentId ? folderRoute(parentId) : APP_ROUTE.ROOT, {
+        replace: true,
+      });
     }
   }, [deleteTarget, deleteNode, previewFile, folderId, navigate]);
 
@@ -145,7 +156,7 @@ export function FolderPage() {
     if (uploading || isSearching) return;
     e.preventDefault();
     dragDepth.current += 1;
-    if (e.dataTransfer.types.includes("Files")) setDragging(true);
+    if (e.dataTransfer.types.includes(DATA_TRANSFER_TYPE.FILES)) setDragging(true);
   }
 
   function onDragLeave(e: DragEvent) {
@@ -160,7 +171,7 @@ export function FolderPage() {
   function onDragOver(e: DragEvent) {
     if (uploading || isSearching) return;
     e.preventDefault();
-    e.dataTransfer.dropEffect = "copy";
+    e.dataTransfer.dropEffect = DROP_EFFECT.COPY;
   }
 
   async function onDrop(e: DragEvent) {
@@ -237,7 +248,7 @@ export function FolderPage() {
             <Fade
               key={
                 isSearching
-                  ? "search"
+                  ? EMPTY_VARIANT.SEARCH
                   : `folder:${folderId ?? "root"}`
               }
               className="flex min-h-0 flex-1 flex-col"
@@ -246,15 +257,20 @@ export function FolderPage() {
                 <NodeList
                   nodes={displayedNodes}
                   listKey={
-                    isSearching ? "search" : `folder:${folderId ?? "root"}`
+                    isSearching
+                      ? EMPTY_VARIANT.SEARCH
+                      : `folder:${folderId ?? "root"}`
                   }
-                  emptyVariant={isSearching ? "search" : "folder"}
+                  emptyVariant={
+                    isSearching ? EMPTY_VARIANT.SEARCH : EMPTY_VARIANT.FOLDER
+                  }
                   searchQuery={query.trim()}
                   onClearSearch={() => setQuery("")}
                   onOpenFolder={() => setQuery("")}
                   onCreateFolder={() => setCreateOpen(true)}
                   onUpload={() => {
-                    if (!uploading && !isSearching) fileInputRef.current?.click();
+                    if (!uploading && !isSearching)
+                      fileInputRef.current?.click();
                   }}
                   onOpenFile={setPreviewFile}
                   onRename={setRenameTarget}
@@ -285,7 +301,7 @@ export function FolderPage() {
         onOpenChange={(open) => {
           if (!open) setRenameTarget(null);
         }}
-        title={`Rename ${renameTarget?.type === "file" ? "file" : "folder"}`}
+        title={`Rename ${renameTarget?.type === NODE_TYPE.FILE ? NODE_TYPE.FILE : NODE_TYPE.FOLDER}`}
         description="Choose a new name. Duplicates in this folder get a number suffix."
         initialName={renameTarget?.name ?? ""}
         submitLabel="Save"
@@ -302,7 +318,7 @@ export function FolderPage() {
           if (!open) setDeleteTarget(null);
         }}
         name={deleteTarget?.name ?? ""}
-        kind={deleteTarget?.type === "file" ? "file" : "folder"}
+        nodeType={deleteTarget?.type ?? NODE_TYPE.FOLDER}
         descendantCount={deleteTarget ? countDescendants(deleteTarget.id) : 0}
         onConfirm={() => void handleDeleteConfirm()}
       />

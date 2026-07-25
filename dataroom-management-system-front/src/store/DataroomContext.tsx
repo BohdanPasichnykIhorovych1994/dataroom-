@@ -9,6 +9,7 @@ import {
 } from 'react'
 import { toast } from 'sonner'
 import type { DataroomNode, FileNode, FolderNode, NodeId, ParentKey } from '@/types'
+import { NODE_TYPE, PDF_EXTENSION } from '@/constants'
 import {
   ensurePdfExtension,
   isPdfFile,
@@ -106,7 +107,7 @@ export function DataroomProvider({ children }: { children: ReactNode }) {
         const kids = childrenByParent.get(current) ?? []
         for (const child of kids) {
           count += 1
-          if (child.type === 'folder') stack.push(child.id)
+          if (child.type === NODE_TYPE.FOLDER) stack.push(child.id)
         }
       }
       return count
@@ -150,7 +151,7 @@ export function DataroomProvider({ children }: { children: ReactNode }) {
         return null
       }
       const cleaned = ensurePdfExtension(sanitizeName(file.name) || 'Untitled.pdf')
-      if (!cleaned || cleaned === '.pdf') {
+      if (!cleaned || cleaned === PDF_EXTENSION) {
         toast.error('Invalid file name')
         return null
       }
@@ -187,7 +188,7 @@ export function DataroomProvider({ children }: { children: ReactNode }) {
         toast.error('Name cannot be empty')
         return false
       }
-      if (node.type === 'file') {
+      if (node.type === NODE_TYPE.FILE) {
         cleaned = ensurePdfExtension(cleaned)
       }
 

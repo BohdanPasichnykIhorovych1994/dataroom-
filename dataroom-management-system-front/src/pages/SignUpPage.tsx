@@ -5,6 +5,8 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { PasswordInput } from "@/components/auth/PasswordInput";
+import { APP_ROUTE, INPUT_TYPE } from "@/constants";
 import {
   clearCustomValidity,
   setEnglishValidity,
@@ -20,7 +22,7 @@ export function SignUpPage() {
   const [pending, setPending] = useState(false);
 
   if (ready && user) {
-    return <Navigate to="/" replace />;
+    return <Navigate to={APP_ROUTE.ROOT} replace />;
   }
 
   async function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
@@ -29,7 +31,7 @@ export function SignUpPage() {
     setPending(true);
     try {
       await signUp(email.trim(), password, false);
-      navigate("/", { replace: true });
+      navigate(APP_ROUTE.ROOT, { replace: true });
     } catch (err) {
       const message =
         err instanceof ApiError ? err.message : "Sign up failed. Try again.";
@@ -59,7 +61,7 @@ export function SignUpPage() {
             <Label htmlFor="email">Email</Label>
             <Input
               id="email"
-              type="email"
+              type={INPUT_TYPE.EMAIL}
               autoComplete="email"
               required
               value={email}
@@ -73,9 +75,8 @@ export function SignUpPage() {
           </div>
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="password">Password</Label>
-            <Input
+            <PasswordInput
               id="password"
-              type="password"
               autoComplete="new-password"
               required
               minLength={8}
@@ -97,7 +98,7 @@ export function SignUpPage() {
         <p className="mt-6 text-center text-sm text-muted-foreground">
           Already have an account?{" "}
           <Link
-            to="/login"
+            to={APP_ROUTE.LOGIN}
             className="font-medium text-foreground underline-offset-4 hover:underline"
           >
             Sign in

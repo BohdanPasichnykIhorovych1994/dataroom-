@@ -1,4 +1,4 @@
-import { PDF_MIME_TYPE } from '../constants';
+import { NODE_TYPE, PDF_MIME_TYPE } from '../constants';
 import {
   DataroomNodeResponse,
   FileNodeResponse,
@@ -16,13 +16,13 @@ export function toNodeResponse(doc: NodeRecord): DataroomNodeResponse {
     updatedAt: doc.updatedAt,
   };
 
-  if (doc.type === 'folder') {
-    return { ...base, type: 'folder' } satisfies FolderNodeResponse;
+  if (doc.type === NODE_TYPE.FOLDER) {
+    return { ...base, type: NODE_TYPE.FOLDER } satisfies FolderNodeResponse;
   }
 
   return {
     ...base,
-    type: 'file',
+    type: NODE_TYPE.FILE,
     size: doc.size ?? 0,
     mimeType: PDF_MIME_TYPE,
   } satisfies FileNodeResponse;

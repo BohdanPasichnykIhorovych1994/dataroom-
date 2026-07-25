@@ -1,6 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { Toaster } from "@/components/ui/sonner";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
+import { APP_ROUTE } from "@/constants";
 import { AuthFadeLayout } from "@/motion";
 import { AuthProvider } from "@/store/AuthContext";
 import { FolderPage } from "@/pages/FolderPage";
@@ -13,14 +14,17 @@ export default function App() {
       <AuthProvider>
         <Routes>
           <Route element={<AuthFadeLayout />}>
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/signup" element={<SignUpPage />} />
+            <Route path={APP_ROUTE.LOGIN} element={<LoginPage />} />
+            <Route path={APP_ROUTE.SIGN_UP} element={<SignUpPage />} />
           </Route>
           <Route element={<ProtectedRoute />}>
-            <Route path="/" element={<FolderPage />} />
-            <Route path="/folder/:folderId" element={<FolderPage />} />
+            <Route path={APP_ROUTE.ROOT} element={<FolderPage />} />
+            <Route path={APP_ROUTE.FOLDER_PATTERN} element={<FolderPage />} />
           </Route>
-          <Route path="*" element={<Navigate to="/login" replace />} />
+          <Route
+            path="*"
+            element={<Navigate to={APP_ROUTE.LOGIN} replace />}
+          />
         </Routes>
         <Toaster richColors position="bottom-right" />
       </AuthProvider>

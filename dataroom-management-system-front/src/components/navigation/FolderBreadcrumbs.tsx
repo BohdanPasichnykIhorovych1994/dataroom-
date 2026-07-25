@@ -7,6 +7,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
+import { APP_ROUTE, folderRoute } from '@/constants'
 import { useBreadcrumbPath, useCurrentFolderId } from '@/hooks/useFolderNavigation'
 import { Fragment } from 'react'
 
@@ -22,7 +23,7 @@ export function FolderBreadcrumbs() {
             <BreadcrumbPage>All files</BreadcrumbPage>
           ) : (
             <BreadcrumbLink asChild>
-              <Link to="/">All files</Link>
+              <Link to={APP_ROUTE.ROOT}>All files</Link>
             </BreadcrumbLink>
           )}
         </BreadcrumbItem>
@@ -36,7 +37,7 @@ export function FolderBreadcrumbs() {
                   <BreadcrumbPage>{item.name}</BreadcrumbPage>
                 ) : (
                   <BreadcrumbLink asChild>
-                    <Link to={`/folder/${item.id}`}>{item.name}</Link>
+                    <Link to={folderRoute(item.id)}>{item.name}</Link>
                   </BreadcrumbLink>
                 )}
               </BreadcrumbItem>

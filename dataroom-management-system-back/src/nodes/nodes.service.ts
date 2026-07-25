@@ -12,6 +12,7 @@ import {
   PARENT_MUST_BE_FOLDER_MESSAGE,
   PARENT_NOT_FOUND_MESSAGE,
   PDF_MIME_TYPE,
+  NODE_TYPE,
 } from './constants';
 import { CreateFolderDto, RenameNodeDto, UploadFileDto } from './dto';
 import {
@@ -60,7 +61,7 @@ export class NodesService {
 
     const created = await this.nodeModel.create({
       ownerId: ownerObjectId,
-      type: 'folder',
+      type: NODE_TYPE.FOLDER,
       name: dto.name.trim(),
       parentId,
       createdAt: now,
@@ -85,7 +86,7 @@ export class NodesService {
 
     const created = await this.nodeModel.create({
       ownerId: ownerObjectId,
-      type: 'file',
+      type: NODE_TYPE.FILE,
       name: dto.name.trim(),
       parentId,
       size: pdf.size,
@@ -159,7 +160,7 @@ export class NodesService {
       .select('+content')
       .exec();
 
-    if (!doc || doc.type !== 'file') {
+    if (!doc || doc.type !== NODE_TYPE.FILE) {
       throw new NotFoundException(FILE_NOT_FOUND_MESSAGE);
     }
 
@@ -184,7 +185,7 @@ export class NodesService {
     if (!parent) {
       throw new NotFoundException(PARENT_NOT_FOUND_MESSAGE);
     }
-    if (parent.type !== 'folder') {
+    if (parent.type !== NODE_TYPE.FOLDER) {
       throw new BadRequestException(PARENT_MUST_BE_FOLDER_MESSAGE);
     }
 

@@ -8,6 +8,7 @@ import type { Response } from 'express';
 import { MulterError } from 'multer';
 import {
   FILE_TOO_LARGE_MESSAGE,
+  MULTER_ERROR_CODE,
   UPLOAD_FAILED_MESSAGE,
 } from '../constants';
 
@@ -16,7 +17,7 @@ export class MulterExceptionFilter implements ExceptionFilter {
   catch(exception: MulterError, host: ArgumentsHost) {
     const res = host.switchToHttp().getResponse<Response>();
 
-    if (exception.code === 'LIMIT_FILE_SIZE') {
+    if (exception.code === MULTER_ERROR_CODE.LIMIT_FILE_SIZE) {
       res.status(HttpStatus.PAYLOAD_TOO_LARGE).json({
         statusCode: HttpStatus.PAYLOAD_TOO_LARGE,
         message: FILE_TOO_LARGE_MESSAGE,

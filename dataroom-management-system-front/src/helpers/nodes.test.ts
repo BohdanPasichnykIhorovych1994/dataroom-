@@ -1,10 +1,11 @@
 import { describe, expect, it } from 'vitest'
+import { NODE_TYPE, SORT_DIRECTION, SORT_FIELD } from '@/constants'
 import { compareNodes, sortNodesBy } from '@/helpers/nodes'
 import type { DataroomNode } from '@/types'
 
 const folderA: DataroomNode = {
   id: 'fa',
-  type: 'folder',
+  type: NODE_TYPE.FOLDER,
   name: 'Alpha',
   parentId: null,
   createdAt: 1,
@@ -13,7 +14,7 @@ const folderA: DataroomNode = {
 
 const folderB: DataroomNode = {
   id: 'fb',
-  type: 'folder',
+  type: NODE_TYPE.FOLDER,
   name: 'Beta',
   parentId: null,
   createdAt: 1,
@@ -22,7 +23,7 @@ const folderB: DataroomNode = {
 
 const fileSmall: DataroomNode = {
   id: 'fs',
-  type: 'file',
+  type: NODE_TYPE.FILE,
   name: 'small.pdf',
   parentId: null,
   size: 100,
@@ -33,7 +34,7 @@ const fileSmall: DataroomNode = {
 
 const fileLarge: DataroomNode = {
   id: 'fl',
-  type: 'file',
+  type: NODE_TYPE.FILE,
   name: 'large.pdf',
   parentId: null,
   size: 9000,
@@ -44,25 +45,34 @@ const fileLarge: DataroomNode = {
 
 describe('compareNodes / sortNodesBy', () => {
   it('keeps folders before files', () => {
-    expect(compareNodes(folderA, fileSmall, 'size', 'desc')).toBeLessThan(0)
+    expect(
+      compareNodes(folderA, fileSmall, SORT_FIELD.SIZE, SORT_DIRECTION.DESC),
+    ).toBeLessThan(0)
   })
 
   it('sorts by name', () => {
-    expect(sortNodesBy([folderB, folderA], 'name', 'asc').map((n) => n.name)).toEqual([
-      'Alpha',
-      'Beta',
-    ])
+    expect(
+      sortNodesBy([folderB, folderA], SORT_FIELD.NAME, SORT_DIRECTION.ASC).map(
+        (n) => n.name,
+      ),
+    ).toEqual(['Alpha', 'Beta'])
   })
 
   it('sorts files by size', () => {
     expect(
-      sortNodesBy([fileLarge, fileSmall], 'size', 'asc').map((n) => n.id),
+      sortNodesBy([fileLarge, fileSmall], SORT_FIELD.SIZE, SORT_DIRECTION.ASC).map(
+        (n) => n.id,
+      ),
     ).toEqual(['fs', 'fl'])
   })
 
   it('sorts by date descending', () => {
     expect(
-      sortNodesBy([folderA, folderB, fileSmall], 'date', 'desc').map((n) => n.id),
+      sortNodesBy(
+        [folderA, folderB, fileSmall],
+        SORT_FIELD.DATE,
+        SORT_DIRECTION.DESC,
+      ).map((n) => n.id),
     ).toEqual(['fb', 'fa', 'fs'])
   })
 })

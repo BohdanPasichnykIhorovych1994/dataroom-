@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { collectDescendantIds } from '@/helpers/nodes'
 import type { DataroomNode } from '@/types'
+import { NODE_TYPE } from '@/constants'
 
 function folder(
   id: string,
@@ -9,7 +10,7 @@ function folder(
 ): DataroomNode {
   return {
     id,
-    type: 'folder',
+    type: NODE_TYPE.FOLDER,
     name,
     parentId,
     createdAt: 1,
@@ -20,7 +21,7 @@ function folder(
 function file(id: string, name: string, parentId: string | null): DataroomNode {
   return {
     id,
-    type: 'file',
+    type: NODE_TYPE.FILE,
     name,
     parentId,
     size: 10,

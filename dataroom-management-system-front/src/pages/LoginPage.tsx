@@ -5,6 +5,8 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { PasswordInput } from "@/components/auth/PasswordInput";
+import { APP_ROUTE, INPUT_TYPE } from "@/constants";
 import {
   clearCustomValidity,
   setEnglishValidity,
@@ -21,7 +23,7 @@ export function LoginPage() {
   const [pending, setPending] = useState(false);
 
   if (ready && user) {
-    return <Navigate to="/" replace />;
+    return <Navigate to={APP_ROUTE.ROOT} replace />;
   }
 
   async function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
@@ -30,7 +32,7 @@ export function LoginPage() {
     setPending(true);
     try {
       await login(email.trim(), password, rememberMe);
-      navigate("/", { replace: true });
+      navigate(APP_ROUTE.ROOT, { replace: true });
     } catch (err) {
       const message =
         err instanceof ApiError ? err.message : "Sign in failed. Try again.";
@@ -60,7 +62,7 @@ export function LoginPage() {
             <Label htmlFor="email">Email</Label>
             <Input
               id="email"
-              type="email"
+              type={INPUT_TYPE.EMAIL}
               autoComplete="email"
               required
               value={email}
@@ -74,9 +76,8 @@ export function LoginPage() {
           </div>
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="password">Password</Label>
-            <Input
+            <PasswordInput
               id="password"
-              type="password"
               autoComplete="current-password"
               required
               minLength={8}
@@ -108,7 +109,7 @@ export function LoginPage() {
         <p className="mt-6 text-center text-sm text-muted-foreground">
           No account?{" "}
           <Link
-            to="/signup"
+            to={APP_ROUTE.SIGN_UP}
             className="font-medium text-foreground underline-offset-4 hover:underline"
           >
             Sign up

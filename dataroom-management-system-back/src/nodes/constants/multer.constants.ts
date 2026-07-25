@@ -1,0 +1,3 @@
+export enum MULTER_ERROR_CODE {
+  LIMIT_FILE_SIZE = 'LIMIT_FILE_SIZE',
+}

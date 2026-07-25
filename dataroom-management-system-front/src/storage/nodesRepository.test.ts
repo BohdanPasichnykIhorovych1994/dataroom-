@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import type { FileNode, FolderNode } from '@/types'
+import { NODE_TYPE, PDF_MIME } from '@/constants'
 import {
   createFolder,
   deleteNode,
@@ -18,7 +19,7 @@ function makeFolder(
 ): FolderNode {
   return {
     id,
-    type: 'folder',
+    type: NODE_TYPE.FOLDER,
     name,
     parentId,
     createdAt: now,
@@ -29,11 +30,11 @@ function makeFolder(
 function makeFile(id: string, name: string, parentId: string | null): FileNode {
   return {
     id,
-    type: 'file',
+    type: NODE_TYPE.FILE,
     name,
     parentId,
     size: 4,
-    mimeType: 'application/pdf',
+    mimeType: PDF_MIME,
     createdAt: now,
     updatedAt: now,
   }

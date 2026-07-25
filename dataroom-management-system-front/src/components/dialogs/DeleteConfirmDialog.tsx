@@ -7,29 +7,30 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/components/ui/alert-dialog'
+} from "@/components/ui/alert-dialog";
+import { NODE_TYPE } from "@/constants";
 
 type DeleteConfirmDialogProps = {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  name: string
-  kind: 'file' | 'folder'
-  descendantCount: number
-  onConfirm: () => void
-}
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  name: string;
+  nodeType: NODE_TYPE;
+  descendantCount: number;
+  onConfirm: () => void;
+};
 
 export function DeleteConfirmDialog({
   open,
   onOpenChange,
   name,
-  kind,
+  nodeType,
   descendantCount,
   onConfirm,
 }: DeleteConfirmDialogProps) {
   const extra =
-    kind === 'folder' && descendantCount > 0
-      ? ` This will also permanently delete ${descendantCount} item${descendantCount === 1 ? '' : 's'} inside.`
-      : ''
+    nodeType === NODE_TYPE.FOLDER && descendantCount > 0
+      ? ` This will also permanently delete ${descendantCount} item${descendantCount === 1 ? "" : "s"} inside.`
+      : "";
 
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
@@ -51,5 +52,5 @@ export function DeleteConfirmDialog({
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
-  )
+  );
 }

@@ -7,6 +7,7 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import type { Request } from 'express';
+import { AUTH_HEADER_SCHEME } from '../constants';
 import { JwtPayload } from '../types';
 
 export type AuthenticatedRequest = Request & {
@@ -43,7 +44,7 @@ export class JwtAuthGuard implements CanActivate {
     const header = request.headers.authorization;
     if (!header) return null;
     const [scheme, token] = header.split(' ');
-    if (scheme !== 'Bearer' || !token) return null;
+    if (scheme !== AUTH_HEADER_SCHEME.BEARER || !token) return null;
     return token;
   }
 }

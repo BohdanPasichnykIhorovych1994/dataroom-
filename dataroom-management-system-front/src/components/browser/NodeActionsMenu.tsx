@@ -7,6 +7,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { NODE_TYPE } from '@/constants'
 import type { DataroomNode } from '@/types'
 
 type NodeActionsMenuProps = {
@@ -38,13 +39,13 @@ export function NodeActionsMenu({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" onClick={(e) => e.stopPropagation()}>
-        {node.type === 'file' && onPreview && (
+        {node.type === NODE_TYPE.FILE && onPreview && (
           <DropdownMenuItem onSelect={onPreview}>
             <Eye />
             Preview
           </DropdownMenuItem>
         )}
-        {node.type === 'file' && onDownload && (
+        {node.type === NODE_TYPE.FILE && onDownload && (
           <DropdownMenuItem onSelect={onDownload}>
             <Download />
             Download

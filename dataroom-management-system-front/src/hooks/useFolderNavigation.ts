@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import { useParams } from 'react-router-dom'
+import { NODE_TYPE } from '@/constants'
 import type { DataroomNode, NodeId } from '@/types'
 import { useDataroom } from '@/store/DataroomContext'
 
@@ -25,7 +26,7 @@ export function useBreadcrumbPath(folderId: NodeId | null) {
     let currentId = folderId
     while (currentId) {
       const node = nodesById.get(currentId)
-      if (!node || node.type !== 'folder') break
+      if (!node || node.type !== NODE_TYPE.FOLDER) break
       path.unshift({ id: node.id, name: node.name })
       currentId = node.parentId
     }

@@ -1,8 +1,9 @@
 import { FolderPlus, Search, Upload } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { EMPTY_VARIANT } from '@/constants'
 
 type EmptyStateProps = {
-  variant?: 'folder' | 'search'
+  variant?: EMPTY_VARIANT
   query?: string
   onCreateFolder?: () => void
   onUpload?: () => void
@@ -10,13 +11,13 @@ type EmptyStateProps = {
 }
 
 export function EmptyState({
-  variant = 'folder',
+  variant = EMPTY_VARIANT.FOLDER,
   query = '',
   onCreateFolder,
   onUpload,
   onClearSearch,
 }: EmptyStateProps) {
-  if (variant === 'search') {
+  if (variant === EMPTY_VARIANT.SEARCH) {
     return (
       <div className="flex flex-1 flex-col items-center justify-center px-6 py-16 text-center">
         <div className="mb-4 flex size-14 items-center justify-center rounded-2xl bg-muted text-muted-foreground">

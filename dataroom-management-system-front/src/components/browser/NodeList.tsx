@@ -1,13 +1,14 @@
 import { FolderRow } from "@/components/browser/FolderRow";
 import { FileRow } from "@/components/browser/FileRow";
 import { EmptyState } from "@/components/browser/EmptyState";
+import { EMPTY_VARIANT } from "@/constants";
 import { isFile, isFolder } from "@/helpers";
 import { AnimatePresence, Fade } from "@/motion";
 import type { DataroomNode, FileNode } from "@/types";
 
 type NodeListProps = {
   nodes: DataroomNode[];
-  emptyVariant?: "folder" | "search";
+  emptyVariant?: EMPTY_VARIANT;
   searchQuery?: string;
   listKey?: string;
   onCreateFolder: () => void;
@@ -22,7 +23,7 @@ type NodeListProps = {
 
 export function NodeList({
   nodes,
-  emptyVariant = "folder",
+  emptyVariant = EMPTY_VARIANT.FOLDER,
   searchQuery = "",
   listKey = "list",
   onCreateFolder,

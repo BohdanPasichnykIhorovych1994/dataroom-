@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { DataroomProvider, useDataroom } from '@/store/DataroomContext'
 import type { DataroomNode, FileNode, FolderNode, NodeId } from '@/types'
+import { NODE_TYPE } from '@/constants'
 
 const {
   getAllNodes,
@@ -135,7 +136,7 @@ describe('DataroomProvider', () => {
       async (input: { name: string; parentId: NodeId | null }) => {
         const folder: FolderNode = {
           id: nextId(),
-          type: 'folder',
+          type: NODE_TYPE.FOLDER,
           name: input.name,
           parentId: input.parentId,
           createdAt: now,
@@ -154,7 +155,7 @@ describe('DataroomProvider', () => {
       }) => {
         const node: FileNode = {
           id: nextId(),
-          type: 'file',
+          type: NODE_TYPE.FILE,
           name: input.name,
           parentId: input.parentId,
           size: input.file.size,
